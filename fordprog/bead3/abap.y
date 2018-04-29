@@ -33,6 +33,7 @@
 %token HAMIS
 %token <szoveg> AZONOSITO
 %type <t> atom
+%type <t> kifejezes
 
 %left VAGY
 %left ES
@@ -90,6 +91,7 @@ deklaracio:
             error( ss.str().c_str() );
         }
         szimbolumtabla[*$1] = var_data(d_loc__.first_line, natural);
+        delete $1;
     }
 |
     AZONOSITO TIPUS LOGIKAI
@@ -103,6 +105,7 @@ deklaracio:
             error( ss.str().c_str() );
         }
         szimbolumtabla[*$1] = var_data(d_loc__.first_line, boolean);
+        delete $1;
     }
 ;
 
@@ -181,6 +184,8 @@ ertekadas:
             ss << "Nem megfelelo tipusu atom: " << *$2 << std::endl;
             error( ss.str().c_str() );
         }
+        delete $2;
+        delete $4;
     }
 ;
 
@@ -194,6 +199,7 @@ be:
             ss << "Nem deklaralt valtozo: " << *$3 << std::endl;
             error( ss.str().c_str() );
         }
+        delete $3;
     }
 ;
 
@@ -297,6 +303,8 @@ osszeadas:
             ss << "Nem megfelelo tipusu atom: " << *$2 << std::endl;
             error( ss.str().c_str() );
         }
+        delete $2;
+        delete $4;
     }
 ;
 
@@ -316,6 +324,8 @@ kivonas:
             ss << "Nem megfelelo tipusu atom: " << *$2 << std::endl;
             error( ss.str().c_str() );
         }
+        delete $2;
+        delete $4;
     }
 ;
 
@@ -335,6 +345,8 @@ szorzas:
             ss << "Nem megfelelo tipusu atom: " << *$4 << std::endl;
             error( ss.str().c_str() );
         }
+        delete $2;
+        delete $4;
     }
 ;
 
@@ -354,6 +366,8 @@ osztas:
             ss << "Nem megfelelo tipusu atom: " << *$4 << std::endl;
             error( ss.str().c_str() );
         }
+        delete $2;
+        delete $4;
     }
 ;
 
@@ -366,6 +380,7 @@ kifejezes:
             ss << "Nem megfelelo tipusu atom: " << *$1 << std::endl;
             error( ss.str().c_str() );
         }
+        $$ = new type(boolean);
     }
 |
     atom KISEBB atom
@@ -381,6 +396,9 @@ kifejezes:
             ss << "Nem megfelelo tipusu atom: " << *$3 << std::endl;
             error( ss.str().c_str() );
         }
+        $$ = new type(boolean);
+        delete $1;
+        delete $3;
     }
 |
     atom NAGYOBB atom
@@ -396,6 +414,9 @@ kifejezes:
             ss << "Nem megfelelo tipusu atom: " << *$3 << std::endl;
             error( ss.str().c_str() );
         }
+        $$ = new type(boolean);
+        delete $1;
+        delete $3;
     }
 |
     atom EGYENLO atom
@@ -411,25 +432,68 @@ kifejezes:
             ss << "Nem megfelelo tipusu atom: " << *$3 << std::endl;
             error( ss.str().c_str() );
         }
+        $$ = new type(boolean);
+        delete $1;
+        delete $3;
     }
 |
     kifejezes ES kifejezes
     {
         std::cout << "kifejezes -> kifejezes ES kifejezes" << std::endl;
+        if(*$1 != boolean) {
+            std::stringstream ss;
+            ss << "Nem megfelelo tipusu kifejezes: " << *$1 << std::endl;
+            error( ss.str().c_str() );
+        }
+        if(*$3 != boolean) {
+            std::stringstream ss;
+            ss << "Nem megfelelo tipusu kifejezes: " << *$3 << std::endl;
+            error( ss.str().c_str() );
+        }
+        $$ = new type(boolean);
+        delete $1;
+        delete $3;
     }
 |
     kifejezes VAGY kifejezes
     {
         std::cout << "kifejezes -> kifejezes VAGY kifejezes" << std::endl;
+        if(*$1 != boolean) {
+            std::stringstream ss;
+            ss << "Nem megfelelo tipusu kifejezes: " << *$1 << std::endl;
+            error( ss.str().c_str() );
+        }
+        if(*$3 != boolean) {
+            std::stringstream ss;
+            ss << "Nem megfelelo tipusu kifejezes: " << *$3 << std::endl;
+            error( ss.str().c_str() );
+        }
+        $$ = new type(boolean);
+        delete $1;
+        delete $3;
     }
 |
     NEM kifejezes
     {
         std::cout << "kifejezes -> NEM kifejezes" << std::endl;
+        if(*$2 != boolean) {
+            std::stringstream ss;
+            ss << "Nem megfelelo tipusu kifejezes: " << *$2 << std::endl;
+            error( ss.str().c_str() );
+        }
+        $$ = new type(boolean);
+        delete $2;
     }
 |
     BALZAROJEL kifejezes JOBBZAROJEL
     {
         std::cout << "kifejezes -> BALZAROJEL kifejezes JOBBZAROJEL" << std::endl;
+        if(*$2 != boolean) {
+            std::stringstream ss;
+            ss << "Nem megfelelo tipusu kifejezes: " << *$2 << std::endl;
+            error( ss.str().c_str() );
+        }
+        $$ = new type(boolean);
+        delete $2;
     }
 ;
