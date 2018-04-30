@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>DoorBash - dashing records</h2>
+
+<h3>Our most picked food and drinks!</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Hot</th>
+            <th>Vegetarian</th>
+            <th colspan="2">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Hot</td>
+                <td>@item.Vegan</td>
+                <td>@item.Price</td>
+                <td><a asp-controller="Categories" asp-action="AddToCart" asp-route-id="@item.Id">Add to Cart</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

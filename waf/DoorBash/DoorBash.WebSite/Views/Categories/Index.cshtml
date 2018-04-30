@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h2>Categories</h2>
+
+<ul class="nav nav-tabs-justified">
+    @foreach (var category in Model)
+    {
+        <li><a asp-action="Category" asp-route-id="@category.Id">@category.Name</a></li>
+    }
+</ul>
+

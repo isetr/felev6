@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Item>
+
+@{
+    ViewData["Title"] = "Order";
+}
+
+<h2>Finishing Order</h2>
+
+<h3>Are you sure you want to cancel this order?</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Hot</th>
+            <th>Vegetarian</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Hot</td>
+                <td>@item.Vegan</td>
+                <td>@item.Price</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="4">Total: </td>
+            <td>@ViewBag.Price</td>
+        </tr>
+    </tbody>
+</table>
+
+<form asp-action="CancelOrder">
+    <input type="submit" value="Cancel Order" class="btn btn-default" />
+</form>
+
+<div>
+    <a asp-action="Index">Back to Cart</a>
+</div>

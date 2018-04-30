@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Item>
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h2>Cart</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Hot</th>
+            <th>Vegetarian</th>
+            <th colspan="2">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Hot</td>
+                <td>@item.Vegan</td>
+                <td>@item.Price</td>
+                <td><a asp-action="RemoveItem" asp-route-id="@item.Id">Remove</a></td>
+            </tr>
+        }
+        <tr>
+            <td colspan="4">Total: </td>
+            <td colspan="2">@ViewBag.Price</td>
+        </tr>
+    </tbody>
+</table>
+<div class="btn btn-default"><a asp-action="Order">Order</a></div>
+<div class="btn btn-default"><a asp-action="CancelOrder">Cancel</a></div>

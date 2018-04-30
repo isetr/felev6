@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  doorbash.website:
+    image: doorbash.website
+    build:
+      context: ./DoorBash.WebSite
+      dockerfile: Dockerfile
