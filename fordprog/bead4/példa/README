@@ -1,0 +1,25 @@
+Fordítóprogram lefordítása:
+    make
+
+(Vagy makefile használata nélkül:
+    flex calculate.l
+    bisonc++ calculate.y
+    g++ -ocalculate calculate.cc parse.cc lex.yy.cc
+)
+
+Fordítóprogram használata:
+    ./calculate example.calculate >example.asm
+
+Az eredmény assembly program lefordítása, 32 bites linuxon:
+    nasm -felf example.asm
+    gcc example.o io.c -oexample
+
+Az eredmény assembly program lefordítása, 64 bites linuxon:
+(Telepítve kell lennie a 32-bites fejállományoknak:
+Ubuntu, Mint: g++-multilib csomag.)
+
+    nasm -felf example.asm
+    gcc -m32 example.o io.c -oexample
+
+A példa futtatása:
+    ./example
