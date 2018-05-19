@@ -17,7 +17,7 @@ inline int Parser::lex()
 {
     int ret = lexer.yylex();
     d_loc__.first_line = lexer.lineno();
-    if (ret == AZONOSITO)
+    if (ret == AZONOSITO || ret == SZAM)
     {
         d_val__.szoveg = new std::string(lexer.YYText());
     }

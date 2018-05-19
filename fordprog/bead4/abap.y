@@ -277,8 +277,10 @@ elagazas:
     ha kulonbenha kulonben
     {
         $$ = new instr_data(d_loc__.first_line, 
-            $1->code + $2->code + $3->code
-        );    
+            $1->code + 
+            $2->code + 
+            $3->code
+        );
         delete $1;
         delete $2;
         delete $3;
@@ -288,13 +290,14 @@ elagazas:
 ha:
     HA kifejezes PONT utasitas utasitasok
     {
+        ++cimke;
         $$ = new instr_data(d_loc__.first_line, 
             $2->code +
             "cmp al,1\n" +
-            "jne near hamis_ag_" + std::to_string(cimke++) + "\n" +
+            "jne near hamis_ag_" + std::to_string(cimke) + "\n" +
             $4->code +
             $5->code +
-            "hamis_ag_" + std::to_string(cimke) + "\n"
+            "hamis_ag_" + std::to_string(cimke) + ":\n"
         );
         delete $2;
         delete $4;
@@ -310,14 +313,17 @@ kulonbenha:
 |
     KULONBENHA kifejezes PONT utasitas utasitasok kulonbenha
     {
+        ++cimke;
         $$ = new instr_data(d_loc__.first_line, 
             $2->code + 
             "cmp al,1\n" +
-            "jne near hamis_ag_" + std::to_string(cimke++) + "\n" +
+            "jne near hamis_ag_" + std::to_string(cimke) + "\n" +
             $4->code +
             $5->code +
-            "hamis_ag_" + std::to_string(cimke) + "\n" +
-            $6->code
+            "jmp vege_" + std::to_string(cimke) + "\n" +
+            "hamis_ag_" + std::to_string(cimke) + ":\n" +
+            $6->code +
+            "vege_" + std::to_string(cimke) + ":\n"
         );
         delete $2;
         delete $4;
@@ -344,15 +350,16 @@ kulonben:
 ciklus:
     AMIG kifejezes PONT utasitas utasitasok CIKLUS_VEGE PONT
     {
+        ++cimke;
         $$ = new instr_data(d_loc__.first_line, 
-            "eleje_" + std::to_string(cimke++) + "\n" +
+            "eleje_" + std::to_string(cimke) + ":\n" +
             $2->code +
-            "cmp al,1" +
+            "cmp al,1\n" +
             "jne near vege_" + std::to_string(cimke) + "\n" +
             $4->code +
             $5->code +
             "jmp eleje_" + std::to_string(cimke) + "\n" +
-            "vege_" + std::to_string(cimke) + "\n"
+            "vege_" + std::to_string(cimke) + ":\n"
         );
         delete $2;
     }
@@ -461,7 +468,11 @@ szorzas:
         }
         $$ = new instr_data(d_loc__.first_line, 
             $4->code +
-            "mul [" + *$2 + "]\n"
+            "push eax\n" +
+            "mov eax,[" + *$2 + "]\n" +
+            "pop ebx\n" +
+            "mul ebx\n" +
+            "mov [" + *$2 + "],eax\n"
         );
         delete $2;
         delete $4;
@@ -484,9 +495,12 @@ osztas:
             error( ss.str().c_str() );
         }
         $$ = new instr_data(d_loc__.first_line, 
+            "xor edx,edx\n" +
             $4->code +
-            "xor edx,edx\n"
-            "div [" + *$2 + "]\n"
+            "push eax\n" +
+            "mov eax,[" + *$2 + "]\n" +
+            "pop ebx\n" +
+            "div ebx\n"
             "mov [" + *$2 + "],eax\n"
         );
         delete $2;
@@ -518,13 +532,14 @@ kifejezes:
             ss << "Nem megfelelo tipusu atom: " << std::endl;
             error( ss.str().c_str() );
         }
+        ++cimke;
         $$ = new expr_data(d_loc__.first_line, boolean, 
             $3->code +
             "push eax\n" +
             $1->code +
             "pop ebx\n"
             "cmp eax,ebx\n"
-            "jb kisebb_" + std::to_string(cimke++) + "\n" +
+            "jb kisebb_" + std::to_string(cimke) + "\n" +
             "mov al,0\n"
             "jmp vege_" + std::to_string(cimke) + "\n" +
             "kisebb_" + std::to_string(cimke) + ":\n" +
@@ -547,13 +562,14 @@ kifejezes:
             ss << "Nem megfelelo tipusu atom: " << std::endl;
             error( ss.str().c_str() );
         }
+        ++cimke;
         $$ = new expr_data(d_loc__.first_line, boolean, 
             $3->code +
             "push eax\n" +
             $1->code +
             "pop ebx\n"
             "cmp eax,ebx\n"
-            "ja nagyobb_" + std::to_string(cimke++) + "\n" +
+            "ja nagyobb_" + std::to_string(cimke) + "\n" +
             "mov al,0\n"
             "jmp vege_" + std::to_string(cimke) + "\n" +
             "nagyobb_" + std::to_string(cimke) + ":\n" +
@@ -576,13 +592,14 @@ kifejezes:
             ss << "Nem megfelelo tipusu atom: "<< std::endl;
             error( ss.str().c_str() );
         }
+        ++cimke;
         $$ = new expr_data(d_loc__.first_line, boolean, 
             $3->code +
             "push eax\n" +
             $1->code +
             "pop ebx\n"
             "cmp eax,ebx\n"
-            "je egyenlo_" + std::to_string(cimke++) + "\n" +
+            "je egyenlo_" + std::to_string(cimke) + "\n" +
             "mov al,0\n"
             "jmp vege_" + std::to_string(cimke) + "\n" +
             "egyenlo_" + std::to_string(cimke) + ":\n" +
@@ -645,10 +662,11 @@ kifejezes:
             ss << "Nem megfelelo tipusu kifejezes: " << std::endl;
             error( ss.str().c_str() );
         }
+        ++cimke;
         $$ = new expr_data(d_loc__.first_line, boolean, 
             $2->code + 
             "cmp al,1\n"
-            "je hamis_" + std::to_string(cimke++) + "\n" +
+            "je hamis_" + std::to_string(cimke) + "\n" +
             "mov al,0\n"
             "jmp vege_" + std::to_string(cimke) + "\n" +
             "hamis_" + std::to_string(cimke) + ":\n" +
