@@ -86,7 +86,8 @@ namespace DoorBash.WebSite.Services
                         Address = order.Address,
                         Phone = order.Phone,
                         Done = false,
-                        Items = items.Select(i => new OrderItem() { ItemID = i.Id }).ToList()
+                        Items = items.Select(i => new OrderItem() { ItemID = i.Id }).ToList(),
+                        Sent = System.DateTime.Now
                     });
                 context.SaveChanges();
             }

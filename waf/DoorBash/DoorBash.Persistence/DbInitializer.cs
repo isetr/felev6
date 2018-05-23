@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace DoorBash.Persistence
 {
     public class DbInitializer
     {
-        public static void Initialize(DoorBashDbContext context)
+        public static void Initialize(DoorBashDbContext context, UserManager<User> userManager = null)
         {
            // context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
@@ -227,6 +228,19 @@ namespace DoorBash.Persistence
 
             foreach (Category category in categories)
                 context.Categories.Add(category);
+
+            if(userManager != null) {
+                var adminUser = new User
+                {
+                    UserName = "admin",
+                    FullName = "Adminisztrátor",
+                    Email = "admin@example.com",
+                    PhoneNumber = "+36123456789"
+                };
+                var adminPassword = "Almafa123";
+
+                var result1 = userManager.CreateAsync(adminUser, adminPassword).Result;
+            }
 
             context.SaveChanges();
         }

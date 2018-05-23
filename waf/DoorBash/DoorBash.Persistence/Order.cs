@@ -24,6 +24,11 @@ namespace DoorBash.Persistence
         [Required]
         public Boolean Done { get; set; }
 
+        [Required]
+        public System.DateTime Sent { get; set; }
+
+        public System.DateTime Approved { get; set; }
+
         public ICollection<OrderItem> Items { get; set; }
     }
 }
