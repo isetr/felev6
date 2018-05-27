@@ -8,12 +8,32 @@
         xmlns:vm="clr-namespace:DoorBash.Desktop.ViewModel"
         x:Class="DoorBash.Desktop.View.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="600">
+        Title="MainWindow" Height="600" Width="600">
     <StackPanel>
-        <ListBox x:Name="lists" Height="100" ItemsSource="{Binding Orders}">
+        <StackPanel Orientation="Horizontal">
+            <Label>Name: </Label>
+            <TextBox Text="{Binding SearchName, Mode=TwoWay}" VerticalAlignment="Center" Width="60" Margin="0,0,20,0"></TextBox>
+            <Label>Address: </Label>
+            <TextBox Text="{Binding SearchAddress, Mode=TwoWay}" VerticalAlignment="Center" Width="60" Margin="0,0,20,0"></TextBox>
+            <ComboBox VerticalAlignment="Center" Margin="0,0,20,0" x:Name="flag">
+                <ComboBoxItem IsSelected="True">Show All</ComboBoxItem>
+                <ComboBoxItem>Only Approved</ComboBoxItem>
+                <ComboBoxItem>Only Unapproved</ComboBoxItem>
+            </ComboBox>
+            <Button Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=flag, Path=SelectedIndex}" Width="60">Search</Button>
+        </StackPanel>
+        <ListBox x:Name="orders" Height="100" ItemsSource="{Binding Orders}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" Margin="0,0,20,0" />
+                        <TextBlock Text="{Binding Phone}" Margin="0,0,20,0" />
+                        <TextBlock Text="{Binding Address}" Margin="0,0,20,0" />
+                        <TextBlock Text="{Binding Sent}" Margin="0,0,20,0" />
+                        <TextBlock Text="{Binding Approved}" Margin="0,0,20,0" />
+                        <TextBlock Text="{Binding Done}" Margin="0,0,20,0" />
+                        <Button Command="{Binding Path=DataContext.FinishCommand,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding Id}">Finish</Button>
+                    </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <i:Interaction.Triggers>
@@ -24,7 +44,7 @@
             </i:Interaction.Triggers>
         </ListBox>
         <DataGrid VerticalContentAlignment="Stretch" ItemsSource="{Binding Items}" IsReadOnly="True"
-                  AutoGenerateColumns="True">
+                  AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
@@ -33,5 +53,34 @@
                 <DataGridTextColumn Header="Price" Binding="{Binding Price}" />
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="300" Margin="20">
+            <StackPanel Orientation="Horizontal">
+                <Label Width="100">Name:</Label>
+                <TextBox Text="{Binding NewItem.Name, Mode=TwoWay}" VerticalAlignment="Center" Width="200" Margin="0,0,20,0"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Width="100">Description:</Label>
+                <TextBox Text="{Binding NewItem.Description, Mode=TwoWay}" VerticalAlignment="Center" Width="200" Margin="0,0,20,0"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Width="100">Category:</Label>
+                <ComboBox VerticalAlignment="Center" Margin="0,0,20,0" x:Name="category" Width="200"
+                      ItemsSource="{Binding Categories}" 
+                      DisplayMemberPath="Name" 
+                      SelectedValuePath="Id" 
+                      SelectedValue="{Binding NewItem.CategoryID}">
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Width="100">Price:</Label>
+                <TextBox Text="{Binding NewItem.Price, Mode=TwoWay}" VerticalAlignment="Center" Width="200" Margin="0,0,20,0"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <CheckBox IsChecked="{Binding NewItem.Hot, Mode=TwoWay}" VerticalAlignment="Center" Width="60" Margin="0,0,20,0">Hot</CheckBox>
+                <CheckBox IsChecked="{Binding NewItem.Vegan, Mode=TwoWay}" VerticalAlignment="Center" Width="60" Margin="0,0,20,0">Vegan</CheckBox>
+            </StackPanel>
+            <Button Command="{Binding AddNewItemCommand}" Width="150" Margin="20">Add</Button>
+        </StackPanel>
+        <Button Command="{Binding LogoutCommand}">Logout</Button>
     </StackPanel>
 </Window>

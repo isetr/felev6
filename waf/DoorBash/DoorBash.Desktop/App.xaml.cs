@@ -58,6 +58,7 @@ namespace DoorBash.Desktop
         {
             mainViewModel = new MainViewModel(service);
             mainViewModel.MessageApplication += ViewModel_MessageApplication;
+            mainViewModel.LogoutSuccess += ViewModel_Logout;
 
             mainWindow = new MainWindow
             {
@@ -66,6 +67,22 @@ namespace DoorBash.Desktop
 
             mainWindow.Show();
             loginWindow.Close();
+        }
+
+        private void ViewModel_Logout(object sender, EventArgs e)
+        {
+            loginWindow = new LoginWindow
+            {
+                DataContext = loginViewModel
+            };
+            loginViewModel = new LoginViewModel(service);
+
+            loginViewModel.ExitApplication += ViewModel_ExitApplication;
+            loginViewModel.MessageApplication += ViewModel_MessageApplication;
+            loginViewModel.LoginSuccess += ViewModel_LoginSuccess;
+            loginViewModel.LoginFailed += ViewModel_LoginFailed;
+            loginWindow.Show();
+            mainWindow.Close();
         }
 
         private void ViewModel_LoginFailed(object sender, EventArgs e)

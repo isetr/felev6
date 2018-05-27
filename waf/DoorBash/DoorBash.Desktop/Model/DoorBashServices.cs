@@ -23,58 +23,16 @@ namespace DoorBash.Desktop.Model
             client = new HttpClient { BaseAddress = new Uri(baseAddress) };
         }
 
-        public async Task<IEnumerable<Order>> LoadOrdersAsync(string searchName = null, string searchAdress = null, OrderListFlag flag = OrderListFlag.ALL)
+        public async Task<IEnumerable<Order>> LoadOrdersAsync(string searchName = null, string searchAdress = null, int flag = 0)
         {
-            HttpResponseMessage res;
+            HttpResponseMessage res = await client.GetAsync("api/Orders/?flag=" + flag + "&name=" + searchName + "&address" + searchAdress);
 
-            Func<OrderListFlag, string> getListing = new Func<OrderListFlag, string> (f =>
-                {
-                    switch (f)
-                    {
-                        case OrderListFlag.ALL:
-                            return "all";
-                        case OrderListFlag.FINISHED:
-                            return "finished";
-                        case OrderListFlag.NOT_FINISHED:
-                            return "notfinished";
-                    }
-                    return "all";
-                }
-            );
-
-            if(!String.IsNullOrEmpty(searchName))
+            if (res.IsSuccessStatusCode)
             {
-                res = await client.GetAsync("api/Orders/?flag=" + getListing.Invoke(flag) + "?name=" + searchName);
-
-                if (res.IsSuccessStatusCode)
-                {
-                    return await res.Content.ReadAsAsync<IEnumerable<Order>>();
-                }
-
-                throw new NetworkException("Service returned response: " + res.StatusCode);
+                return await res.Content.ReadAsAsync<IEnumerable<Order>>();
             }
-            else if (!String.IsNullOrEmpty(searchAdress))
-            {
-                res = await client.GetAsync("api/Orders/?flag=" + getListing.Invoke(flag) + "?address=" + searchName);
 
-                if (res.IsSuccessStatusCode)
-                {
-                    return await res.Content.ReadAsAsync<IEnumerable<Order>>();
-                }
-
-                throw new NetworkException("Service returned response: " + res.StatusCode);
-            }
-            else
-            {
-                res = await client.GetAsync("api/Orders/?flag=" + getListing.Invoke(flag));
-
-                if (res.IsSuccessStatusCode)
-                {
-                    return await res.Content.ReadAsAsync<IEnumerable<Order>>();
-                }
-
-                throw new NetworkException("Service returned response: " + res.StatusCode);
-            }
+            throw new NetworkException("Service returned response: " + res.StatusCode);
         }
 
         public async Task<IEnumerable<Item>> LoadItems(int id)
@@ -87,12 +45,23 @@ namespace DoorBash.Desktop.Model
             }
 
             throw new NetworkException("Service returned response: " + res.StatusCode);
+        }
 
+        public async Task<bool> FinishOrder(int id)
+        {
+            HttpResponseMessage res = await client.PostAsJsonAsync("api/Orders/Finish", id);
+
+            if (res.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            throw new NetworkException("Service returned response: " + res.StatusCode);
         }
 
         public async Task<IEnumerable<Category>> LoadCategories()
         {
-            HttpResponseMessage res = await client.GetAsync("api/Categories");
+            HttpResponseMessage res = await client.GetAsync("api/Category");
 
             if(res.IsSuccessStatusCode)
             {

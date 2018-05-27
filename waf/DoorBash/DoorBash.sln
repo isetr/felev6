@@ -5,11 +5,9 @@ VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoorBash.WebSite", "DoorBash.WebSite\DoorBash.WebSite.csproj", "{1898A394-1FC5-4404-A681-5E0707CCF095}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{64D76B1C-230B-4BB2-9037-EB9D6E6E4A54}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoorBash.Persistence", "DoorBash.Persistence\DoorBash.Persistence.csproj", "{67936491-8A10-4C74-9A57-3F3D82B65B3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoorBash.WebApi", "DoorBash.WebApi\DoorBash.WebApi.csproj", "{18DD96EA-F016-4E4F-A1AE-E3D7AE6556BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoorBash.WebApi", "DoorBash.WebApi\DoorBash.WebApi.csproj", "{18DD96EA-F016-4E4F-A1AE-E3D7AE6556BD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{67936491-8A10-4C74-9A57-3F3D82B65B3A} = {67936491-8A10-4C74-9A57-3F3D82B65B3A}
 	EndProjectSection
@@ -18,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoorBash.Desktop", "DoorBas
 	ProjectSection(ProjectDependencies) = postProject
 		{18DD96EA-F016-4E4F-A1AE-E3D7AE6556BD} = {18DD96EA-F016-4E4F-A1AE-E3D7AE6556BD}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoorBash.WebApi.Tests", "DoorBash.WebApi.Tests\DoorBash.WebApi.Tests.csproj", "{799C9F8A-B262-418F-9DB2-2BC4398CC195}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{1898A394-1FC5-4404-A681-5E0707CCF095}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1898A394-1FC5-4404-A681-5E0707CCF095}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1898A394-1FC5-4404-A681-5E0707CCF095}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64D76B1C-230B-4BB2-9037-EB9D6E6E4A54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64D76B1C-230B-4BB2-9037-EB9D6E6E4A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64D76B1C-230B-4BB2-9037-EB9D6E6E4A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64D76B1C-230B-4BB2-9037-EB9D6E6E4A54}.Release|Any CPU.Build.0 = Release|Any CPU
 		{67936491-8A10-4C74-9A57-3F3D82B65B3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67936491-8A10-4C74-9A57-3F3D82B65B3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67936491-8A10-4C74-9A57-3F3D82B65B3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{D3A662D7-5EB6-4270-A0DE-176B4D91292C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3A662D7-5EB6-4270-A0DE-176B4D91292C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3A662D7-5EB6-4270-A0DE-176B4D91292C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{799C9F8A-B262-418F-9DB2-2BC4398CC195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{799C9F8A-B262-418F-9DB2-2BC4398CC195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{799C9F8A-B262-418F-9DB2-2BC4398CC195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{799C9F8A-B262-418F-9DB2-2BC4398CC195}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
