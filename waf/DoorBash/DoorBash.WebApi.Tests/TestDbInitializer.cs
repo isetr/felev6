@@ -242,10 +242,13 @@ namespace DoorBash.WebApi.Tests
                 }
             };
 
-            context.Orders.Add(order);
 
             foreach (Category category in categories)
                 context.Categories.Add(category);
+
+            context.SaveChanges();
+
+            context.Orders.Add(order);
 
             context.SaveChanges();
         }

@@ -25,7 +25,7 @@ namespace DoorBash.Desktop.Model
 
         public async Task<IEnumerable<Order>> LoadOrdersAsync(string searchName = null, string searchAdress = null, int flag = 0)
         {
-            HttpResponseMessage res = await client.GetAsync("api/Orders/?flag=" + flag + "&name=" + searchName + "&address" + searchAdress);
+            HttpResponseMessage res = await client.GetAsync("api/Orders/?flag=" + flag + "&name=" + searchName + "&address=" + searchAdress);
 
             if (res.IsSuccessStatusCode)
             {
